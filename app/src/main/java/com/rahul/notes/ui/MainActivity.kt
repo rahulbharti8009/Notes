@@ -1,7 +1,7 @@
 package com.rahul.notes.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -12,17 +12,14 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -50,38 +47,34 @@ class MainActivity : ComponentActivity() {
 //  navHost
 //  navGraph
 //  navController
+    @SuppressLint("SuspiciousIndentation")
+    @Preview
     @Composable
     private fun AppController() {
         val navController = rememberNavController()
-        val context = LocalContext.current
         val isLogin = if(false) "DashBoard" else "Login"
 
         NavHost(navController = navController, startDestination = isLogin) {
             composable("Login") {
-                Login {
+                LoginCompose {
                     navController.navigate("DashBoard/$it")
                 }
             }
             composable("Registration") {
                 Registration()
             }
-            composable("DashBoard/{email}", arguments = listOf(navArgument("email") { type = NavType.StringType })) {
+            composable("DashBoard/{email}", arguments = listOf(
+                navArgument("email") {
+                    type = NavType.StringType
+                }
+            )) {
              val email =    it.arguments?.getString("email")
-//                Toast.makeText(LocalContext.current, "", Toast.LENGTH_LONG).show()
                 EnterAnimation {
-                    DashBoard(email!!)
+                    DashBoardCompose(email!!)
                 }
             }
         }
     }
-
-    @Composable
-    private fun Login(onClick : (String)-> Unit) {
-     Column {
-         Text(text = "Login", modifier = Modifier.clickable {  onClick("rb@gmail.com") })
-     }
-    }
-
 
     @Composable
     private fun Registration() {
@@ -89,30 +82,7 @@ class MainActivity : ComponentActivity() {
             Text(text = "Registration")
         }
     }
-
-    @Composable
-    private fun DashBoard(email : String) {
-        Column {
-            Text(text = "DashBoard $email")
-        }
-    }
 }
-
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier
-//    )
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    NotesTheme {
-//        Greeting("Android")
-//    }
-//}
 
 @Composable
 fun EnterAnimation(content: @Composable () -> Unit) {

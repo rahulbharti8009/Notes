@@ -79,29 +79,11 @@ fun DashBoardUI(navController : NavHostController, title : String) {
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyAppTopBar(title: String) {
-    TopAppBar(
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        title = {
-            Text(text = title, style = MaterialTheme.typography.titleSmall, fontSize = 18.sp)
-        },
-        modifier = Modifier.fillMaxWidth(),
-
-
-    )
-}
-
 @Composable
 fun itemsCards(email: String) {
     Card(
         shape = RoundedCornerShape(10.dp),
-        border = BorderStroke(0.5.dp, Color.Gray),
+        border = BorderStroke(0.5.dp, Color.White),
         modifier = Modifier
             .padding(2.dp)
             .fillMaxWidth()

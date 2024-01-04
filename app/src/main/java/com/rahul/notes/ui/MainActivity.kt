@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
             )) {
              val email =    it.arguments?.getString("email")
                 EnterAnimation {
-                    DashBoardCompose(email!!)
+                    DashBoardUI(navController , email!!)
                 }
             }
         }

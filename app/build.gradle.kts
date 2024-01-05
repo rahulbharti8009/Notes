@@ -74,9 +74,11 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-//    Constraint layout
+//  Constraint layout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-
+//  GSON
+    implementation("com.google.code.gson:gson:2.10")
+//
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("com.google.android.material:material:1.11.0")
     val navVersion = "2.7.6"

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,6 +44,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -50,6 +52,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,29 +61,43 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.rahul.notes.R
+import com.rahul.notes.entity.DataManageEntity
+import com.rahul.notes.entity.NotesEntity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun DashBoardUI(navController : NavHostController, title : String) {
-    Box {
-        Column {
-//            MyAppTopBar(title = "HOME")
-            val myList = listOf( 1,2,3,4,5,6,7,8,9,10,11,12)
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(1),
-                contentPadding = PaddingValues(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(1.dp),
-            ) {
-                items(myList.size) { item ->
-                    itemsCards(item.toString())
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(2000)
+            DataManageEntity.loadAssetsFromFile(context)
+        }
+    }
+    if(DataManageEntity.isData.value) {
+        Box {
+            Column {
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(1),
+                    contentPadding = PaddingValues(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(1.dp),
+                ) {
+                    items(DataManageEntity.data) { item ->
+                        ItemsCards(item)
 //               Divider(color = Color.Black, thickness = 0.5.dp)
+                    }
                 }
             }
         }
+    } else {
+        Text(text = "Loading...")
     }
 }
 @Composable
-fun itemsCards(email: String) {
+fun ItemsCards(entity: NotesEntity) {
     Card(
         shape = RoundedCornerShape(10.dp),
         border = BorderStroke(0.5.dp, Color.White),
@@ -98,12 +115,12 @@ fun itemsCards(email: String) {
                     .clip(CircleShape)
                     .background(Color.Gray)
             ) {
-                Text(text = email.substring(0, 1).uppercase(), fontSize = 20.sp)
+                Text(text = entity.title.substring(0, 1).uppercase(), fontSize = 20.sp)
             }
             Spacer(modifier = Modifier.width(10.dp))
             Column(Modifier.weight(.8f)) {
-                Text(text = "Title $email", style = MaterialTheme.typography.titleSmall)
-                Text(text = "text")
+                Text(text = "Title ${entity.title}", style = MaterialTheme.typography.titleSmall)
+                Text(text = entity.msg)
             }
         }
     }

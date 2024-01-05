@@ -52,9 +52,10 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AppController() {
         val navController = rememberNavController()
-        val isLogin = if(false) "DashBoard" else "Login"
+        var isLogin = false
+        val uiType = if(isLogin) "DashBoard" else "Login"
 
-        NavHost(navController = navController, startDestination = isLogin) {
+        NavHost(navController = navController, startDestination = uiType) {
             composable("Login") {
                 LoginCompose {
                     navController.navigate("DashBoard/$it")
